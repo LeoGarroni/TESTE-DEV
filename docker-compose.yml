@@ -1,0 +1,17 @@
+version: '3'
+services:
+    core_api:
+        build: .
+        container_name: "api-container"
+        ports:
+            - "8000:15400"
+        environment:
+            - DB_URL=mongodb://db/User
+        volumes:
+            - .:/app
+    db:
+        image: mongodb
+        ports:
+            - "27017:27017"
+        volumes:
+            - ./data:/data/db
