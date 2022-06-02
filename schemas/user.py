@@ -1,19 +1,12 @@
-def userEntity(item) -> dict:
-    return{
-        "id":str(item["_id"]),
-        "nome":item["nome"],
-        "email":item["email"],
-        "tel":item["tel"],
-        "endereco":item["endereco"],
-        "profissao":item["profissao"],
+def user_serializer(user) -> dict:
+    return {
+        "id": str(user["_id"]),
+        "nome":user["nome"],
+        "email":user["email"],
+        "tel":user["tel"],
+        "endereco":user["endereco"],
+        "profissao":user["profissao"],
     }
 
-
-def usersEntity(entity) -> list:
-    return [userEntity(item) for item in entity]
-
-def serializeDict(a) -> dict:
-    return {**{i:str(a[i]) for i in a if i=='_id'},**{i:a[i] for i in a if i!='_id'}}
-
-def serializeList(entity) -> list:
-    return [serializeDict(a) for a in entity]
+def users_serializer(users) -> list:
+    return [user_serializer(user) for user in users]

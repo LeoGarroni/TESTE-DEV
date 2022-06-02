@@ -1,30 +1,30 @@
 from fastapi import APIRouter
 
 from models.user import User
-from config.db import conn
-from schemas.user import serializeDict, serializeList
+from config.db import collection_name
+from schemas.user import user_serializer, users_serializer
 from bson import ObjectId
 
-user = APIRouter()
+api_router = APIRouter()
 
-@user.get('/')
+@api_router.get('/')
 async def find_all_users():
-    print(conn.local.user.find())
-    print(serializeList(conn.local.user.find()))
-    return serializeList(conn.local.user.find())
+    users = users_serializer(collection_name.find())
+    return users
 
-@user.post('/')
+@api_router.post('/')
 async def create_user(user: User):
-    conn.local.user.insert_one(dict(user))
-    return serializeList(conn.local.user.find())
+    _id = collection_name.insert_one(dict(user))
+    return users_serializer(collection_name.find({"_id": _id.inserted_id}))
 
-@user.put('/{id}')
+@api_router.put('/{id}')
 async def update_user(id, user: User):
-    conn.local.user.find_one_and_update({"_id":ObjectId(id)},
-    {"$set":dict(user)
+    collection_name.find_one_and_update({"_id": ObjectId(id)}, {
+        "$set": dict(user)
     })
-    return serializeDict(conn.local.user.find_one({"_id":ObjectId(id)}))
+    return users_serializer(collection_name.find({"_id": ObjectId(id)}))
 
-@user.delete('/{id}')
+@api_router.delete('/{id}')
 async def delete_user(id,user: User):
-    return serializeDict(conn.local.user.find_one_and_delete({"_id":ObjectId(id)}))
+    collection_name.find_one_and_delete({"_id": ObjectId(id)})
+    return {"status": "ok"}
