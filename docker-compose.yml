@@ -1,11 +1,10 @@
 version: '3'
 services:
-    core_api:
-        build: .
-        container_name: "api-container"
-        ports:
-            - "8000:15400"
-        environment:
-            - DB_URL=mongodb://db/User
-        volumes:
-            - .:/app
+  api:
+    container_name: api
+    build: .
+    volumes:
+      - ./:/usr/src/application:ro
+    command: uvicorn index:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - 8000:8000
