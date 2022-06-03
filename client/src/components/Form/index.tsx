@@ -6,29 +6,34 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 
 import styles from './styles.module.scss';
+import { api } from '../../services/api';
+import { useEffect } from 'react';
 
 interface IResult {
-  firstName: string,
-  lastName: string,
+  nome: string,
   email:string,
   tel: string,
-  address: string,
-  profession: string
+  endereco: string,
+  profissao: string
 }
 
 export default function Form() {
+
+  useEffect(() => {
+    api.get('Users')
+    .then(response => console.log(response.result))
+  }, []);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
     const result: IResult = {
-      firstName: data.get('firstName').toString(),
-      lastName: data.get('lastName').toString(),
+      nome: data.get('nome').toString(),
       email: data.get('email').toString(),
-      tel: data.get('telephone').toString(),
-      address: data.get('address').toString(),
-      profession: data.get('profession').toString()
+      tel: data.get('telefone').toString(),
+      endereco: data.get('endereco').toString(),
+      profissao: data.get('profissao').toString()
     }
     console.log(result);
   };
@@ -47,26 +52,14 @@ export default function Form() {
             Novo Cadastro
           </h1>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 2}}>
-            <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  autoComplete="given-name"
-                  name="firstName"
                   required
                   fullWidth
-                  id="firstName"
+                  id="nome"
+                  name="nome"
                   label="Nome"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  name="lastName"
-                  label="Sobrenome"
-                  autoComplete="family-name"
+                  autoComplete="nome"
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -82,24 +75,24 @@ export default function Form() {
               <Grid item xs={12} sm={6}>
                 <TextField
                     fullWidth
-                    id="telephone"
-                    name="telephone"
+                    id="telefone"
+                    name="telefone"
                     label="Telefone"
                   />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                     fullWidth
-                    id="address"
-                    name="address"
+                    id="endereco"
+                    name="endereco"
                     label="Endereço Completo"
                   />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                     fullWidth
-                    id="profession"
-                    name="profession"
+                    id="profissao"
+                    name="profissao"
                     label="Profissão"
                   />
               </Grid>
@@ -127,7 +120,6 @@ export default function Form() {
                   Enviar
                 </Button>
               </Grid>
-            </Grid>
           </Box>
         </Box>
       </Container>
